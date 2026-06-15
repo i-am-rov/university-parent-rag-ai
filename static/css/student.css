@@ -1,0 +1,115 @@
+.profile-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: var(--space-5);
+  align-items: center;
+  padding: var(--space-6);
+}
+
+.avatar {
+  display: grid;
+  width: 72px;
+  height: 72px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+  font-size: 1.45rem;
+  font-weight: 850;
+}
+
+.profile-name {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.profile-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.student-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+  gap: var(--space-5);
+}
+
+.info-list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.info-row:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.info-label {
+  color: var(--color-muted);
+  font-weight: 700;
+}
+
+.info-value {
+  text-align: right;
+  font-weight: 800;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.course-card {
+  padding: var(--space-4);
+}
+
+.course-card h3 {
+  margin: 0 0 var(--space-2);
+  font-size: 1rem;
+}
+
+.course-card p {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.fee-total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-dark);
+}
+
+.fee-total strong {
+  font-size: 1.65rem;
+}
+
+@media (max-width: 920px) {
+  .profile-hero,
+  .student-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hero {
+    text-align: left;
+  }
+
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+}
