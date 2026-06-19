@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Ask Assistant - University Parent Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/chat.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Ask the university assistant</h1>
+        <p class="page-subtitle">Ask about CGPA, courses, exams, fees, waivers, and payment reasons for your authorized child.</p>
+      </div>
+    </header>
+
+    <div class="chat-shell">
+      <aside class="chat-sidebar card">
+        <div class="card-body stack">
+          <h2 class="card-title">Suggested questions</h2>
+          <div class="prompt-list">
+            <button class="prompt-chip" type="button" data-prompt="What is my child's CGPA?">What is my child's CGPA?</button>
+            <button class="prompt-chip" type="button" data-prompt="Which courses are enrolled this semester?">Current courses</button>
+            <button class="prompt-chip" type="button" data-prompt="How much fee do I need to pay before the final exam?">Fee before final</button>
+            <button class="prompt-chip" type="button" data-prompt="Show the full fee calculation with waiver.">Waiver calculation</button>
+            <button class="prompt-chip" type="button" data-prompt="When is the final exam?">Final exam schedule</button>
+          </div>
+          <div class="alert warning">
+            The assistant will refuse requests about other students.
+          </div>
+        </div>
+      </aside>
+
+      <section class="chat-panel card" aria-label="Assistant chat">
+        <div class="messages" data-chat-messages>
+          <article class="message assistant">
+            <div class="message-body">
+              Hello. I can answer questions about your authorized child's university data and related official policies.
+            </div>
+            <div class="message-meta">University assistant</div>
+          </article>
+        </div>
+
+        <form class="chat-composer" data-chat-form data-endpoint="/chat/ask">
+          <label class="sr-only" for="question">Question</label>
+          <textarea class="textarea" id="question" name="question" data-chat-input placeholder="Ask about CGPA, courses, exam schedule, fees, or waiver..." required></textarea>
+          <button class="button" type="submit">Send</button>
+        </form>
+      </section>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/chat.js') }}"></script>
+{% endblock %}
