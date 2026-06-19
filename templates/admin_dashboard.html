@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - University Parent Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Admin dashboard</h1>
+        <p class="page-subtitle">Manage students, parents, access links, fees, exams, and policy document ingestion.</p>
+      </div>
+    </header>
+
+    <div class="admin-shell">
+      <aside class="admin-sidebar card">
+        <div class="card-body">
+          <nav class="admin-menu" aria-label="Admin sections">
+            <button class="active" type="button" data-admin-target="panel-students">Students</button>
+            <button type="button" data-admin-target="panel-parents">Parents</button>
+            <button type="button" data-admin-target="panel-fees">Fees</button>
+            <button type="button" data-admin-target="panel-exams">Exams</button>
+            <button type="button" data-admin-target="panel-policies">Policies</button>
+          </nav>
+        </div>
+      </aside>
+
+      <div class="stack">
+        <section class="card" id="panel-students" data-admin-panel>
+          <div class="card-body stack">
+            <div class="admin-toolbar">
+              <h2 class="card-title">Add student</h2>
+              <input class="input admin-search" type="search" placeholder="Search students" data-admin-search="student-list">
+            </div>
+            <form class="admin-form-grid" data-admin-form data-endpoint="/admin/students">
+              <div class="field">
+                <label for="student_id">Student ID</label>
+                <input class="input" id="student_id" name="student_id" required>
+              </div>
+              <div class="field">
+                <label for="student_name">Name</label>
+                <input class="input" id="student_name" name="name" required>
+              </div>
+              <div class="field">
+                <label for="department">Department</label>
+                <input class="input" id="department" name="department" required>
+              </div>
+              <div class="field">
+                <label for="semester">Semester</label>
+                <input class="input" id="semester" name="semester" required>
+              </div>
+              <div class="span-full">
+                <button class="button" type="submit">Save student</button>
+              </div>
+            </form>
+            <div id="student-list" class="empty-state">
+              <p data-search-row>Student records will appear here after database integration.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="panel-parents" data-admin-panel hidden>
+          <div class="card-body stack">
+            <h2 class="card-title">Link parent with student</h2>
+            <form class="admin-form-grid" data-admin-form data-endpoint="/admin/parent-links">
+              <div class="field">
+                <label for="parent_email">Parent email</label>
+                <input class="input" id="parent_email" name="parent_email" type="email" required>
+              </div>
+              <div class="field">
+                <label for="linked_student_id">Authorized student ID</label>
+                <input class="input" id="linked_student_id" name="student_id" required>
+              </div>
+              <div class="span-full">
+                <button class="button" type="submit">Create access link</button>
+              </div>
+            </form>
+            <div class="alert warning">Only verified parent-child links should be created by authorized university staff.</div>
+          </div>
+        </section>
+
+        <section class="card" id="panel-fees" data-admin-panel hidden>
+          <div class="card-body stack">
+            <h2 class="card-title">Upload fee data</h2>
+            <form class="stack" data-admin-form data-endpoint="/admin/fees/upload" enctype="multipart/form-data">
+              <label class="upload-zone" data-upload-zone>
+                <input class="sr-only" name="file" type="file" accept=".csv,.xlsx">
+                <span data-upload-label>Drop fee CSV/XLSX here or click to select</span>
+              </label>
+              <button class="button" type="submit">Upload fees</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="card" id="panel-exams" data-admin-panel hidden>
+          <div class="card-body stack">
+            <h2 class="card-title">Upload exam schedule</h2>
+            <form class="stack" data-admin-form data-endpoint="/admin/exams/upload" enctype="multipart/form-data">
+              <label class="upload-zone" data-upload-zone>
+                <input class="sr-only" name="file" type="file" accept=".csv,.xlsx">
+                <span data-upload-label>Drop exam schedule CSV/XLSX here or click to select</span>
+              </label>
+              <button class="button" type="submit">Upload exams</button>
+            </form>
+          </div>
+        </section>
+
+        <section class="card" id="panel-policies" data-admin-panel hidden>
+          <div class="card-body stack">
+            <h2 class="card-title">Upload policy documents</h2>
+            <form class="stack" data-admin-form data-endpoint="/admin/policies/upload" enctype="multipart/form-data">
+              <label class="upload-zone" data-upload-zone>
+                <input class="sr-only" name="files" type="file" accept=".pdf,.txt,.docx" multiple>
+                <span data-upload-label>Drop policy documents here for RAG ingestion</span>
+              </label>
+              <button class="button" type="submit">Upload and ingest</button>
+            </form>
+            <div class="alert success">Uploaded policy files will later be chunked, embedded, and stored in the vector database.</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/admin.js') }}"></script>
+{% endblock %}
