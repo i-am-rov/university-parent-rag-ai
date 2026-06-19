@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Fee Details - University Parent Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container stack">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Fee details</h1>
+        <p class="page-subtitle">Semester fee calculation with tuition waiver, paid amount, and due amount before final exam.</p>
+      </div>
+      <a class="button" href="/chat">Ask why this amount is due</a>
+    </header>
+
+    <div class="student-layout">
+      <section class="card">
+        <div class="card-body stack">
+          <h2 class="card-title">Calculation</h2>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Amount</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Registration fee</td>
+                  <td>Tk {{ fee.registration_fee | default("29,500") }}</td>
+                  <td>Fixed semester charge</td>
+                </tr>
+                <tr>
+                  <td>Tuition fee</td>
+                  <td>Tk {{ fee.tuition_fee | default("58,800") }}</td>
+                  <td>Before waiver</td>
+                </tr>
+                <tr>
+                  <td>Waiver</td>
+                  <td>{{ fee.waiver_percentage | default("25") }}%</td>
+                  <td>Applied to tuition fee</td>
+                </tr>
+                <tr>
+                  <td>Lab fee</td>
+                  <td>Tk {{ fee.lab_fee | default("7,500") }}</td>
+                  <td>Course-based charge</td>
+                </tr>
+                <tr>
+                  <td>Other fee</td>
+                  <td>Tk {{ fee.other_fee | default("3,200") }}</td>
+                  <td>University service charge</td>
+                </tr>
+                <tr>
+                  <td>Already paid</td>
+                  <td>Tk {{ fee.paid_amount | default("65,800") }}</td>
+                  <td>Received payment</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="fee-total">
+            <span>Due before final exam</span>
+            <strong>Tk {{ fee.due_amount | default("18,500") }}</strong>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="card-body stack">
+          <h2 class="card-title">Try local calculator</h2>
+          <form class="stack" data-fee-calculator>
+            <input class="input" name="registration_fee" type="number" value="29500" aria-label="Registration fee">
+            <input class="input" name="tuition_fee" type="number" value="58800" aria-label="Tuition fee">
+            <input class="input" name="lab_fee" type="number" value="7500" aria-label="Lab fee">
+            <input class="input" name="other_fee" type="number" value="3200" aria-label="Other fee">
+            <input class="input" name="waiver_percentage" type="number" value="25" aria-label="Waiver percentage">
+            <input class="input" name="paid_amount" type="number" value="65800" aria-label="Paid amount">
+          </form>
+          <div class="fee-total">
+            <span>Calculated due</span>
+            <strong>Tk <span data-fee-output>18,500</span></strong>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/student.js') }}"></script>
+{% endblock %}
