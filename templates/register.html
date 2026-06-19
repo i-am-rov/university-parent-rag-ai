@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Register - University Parent Assistant{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+{% block topbar %}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/login.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="auth-panel">
+  <div class="auth-header">
+    <a class="brand" href="/">
+      <span class="brand-mark">UP</span>
+      <span>Parent Assistant</span>
+    </a>
+    <h1>Create parent account</h1>
+    <p>Your account must be linked by the university before private student data is available.</p>
+  </div>
+
+  <form class="auth-form" data-auth-form data-endpoint="/auth/register" data-redirect="/login">
+    <div data-alert-region></div>
+
+    <div class="field">
+      <label for="name">Full name</label>
+      <input class="input" id="name" name="name" type="text" autocomplete="name" required>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+
+    <div class="field">
+      <label for="email">Email</label>
+      <input class="input" id="email" name="email" type="email" autocomplete="email" required>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+
+    <div class="field">
+      <label for="phone">Phone</label>
+      <input class="input" id="phone" name="phone" type="tel" autocomplete="tel">
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <div class="password-row">
+        <input class="input" id="password" name="password" type="password" autocomplete="new-password" required>
+        <button class="password-toggle" type="button" data-toggle-password="password" aria-pressed="false">Show</button>
+      </div>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+
+    <div class="field">
+      <label for="confirm_password">Confirm password</label>
+      <div class="password-row">
+        <input class="input" id="confirm_password" name="confirm_password" type="password" autocomplete="new-password" required>
+        <button class="password-toggle" type="button" data-toggle-password="confirm_password" aria-pressed="false">Show</button>
+      </div>
+      <span class="form-error" aria-live="polite"></span>
+    </div>
+
+    <div class="auth-actions">
+      <button class="button" type="submit">Create account</button>
+      <p class="auth-footnote">Already registered? <a href="/login">Login</a>.</p>
+    </div>
+  </form>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/login.js') }}"></script>
+{% endblock %}
