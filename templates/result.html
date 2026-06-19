@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Result - University Parent Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container stack">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Academic result</h1>
+        <p class="page-subtitle">Semester-wise result summary and course grades for the authorized student.</p>
+      </div>
+      <input class="input" type="search" placeholder="Filter results" data-table-filter="result-table" aria-label="Filter results">
+    </header>
+
+    <section class="grid three">
+      <article class="card metric-card">
+        <div class="card-body">
+          <p class="metric-label">Current CGPA</p>
+          <p class="metric-value">{{ result.cgpa | default("3.54") }}</p>
+        </div>
+      </article>
+      <article class="card metric-card">
+        <div class="card-body">
+          <p class="metric-label">Completed credits</p>
+          <p class="metric-value">{{ result.completed_credits | default("82") }}</p>
+        </div>
+      </article>
+      <article class="card metric-card">
+        <div class="card-body">
+          <p class="metric-label">Current semester</p>
+          <p class="metric-value">{{ result.semester | default("6th") }}</p>
+        </div>
+      </article>
+    </section>
+
+    <div class="table-wrap">
+      <table class="table" id="result-table">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Credits</th>
+            <th>Grade</th>
+            <th>Grade point</th>
+            <th>Semester</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in results | default([]) %}
+          <tr>
+            <td>{{ row.course }}</td>
+            <td>{{ row.credits }}</td>
+            <td><span class="badge success">{{ row.grade }}</span></td>
+            <td>{{ row.grade_point }}</td>
+            <td>{{ row.semester }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td>Database Systems</td>
+            <td>3</td>
+            <td><span class="badge success">A-</span></td>
+            <td>3.70</td>
+            <td>Spring 2026</td>
+          </tr>
+          <tr>
+            <td>Software Engineering</td>
+            <td>3</td>
+            <td><span class="badge success">A</span></td>
+            <td>4.00</td>
+            <td>Spring 2026</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/student.js') }}"></script>
+{% endblock %}
