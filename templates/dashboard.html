@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - University Parent Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Parent dashboard</h1>
+        <p class="page-subtitle">A quick view of your authorized child's semester, fees, courses, and upcoming exams.</p>
+      </div>
+      <button class="button secondary" type="button" data-refresh-section="dashboard-summary" data-endpoint="/student/summary">Refresh</button>
+    </header>
+
+    <section id="dashboard-summary" class="dashboard-summary">
+      <article class="card metric-card">
+        <p class="metric-label">CGPA</p>
+        <p class="metric-value" data-count-to="{{ student.cgpa | default(3.54) }}" data-duration="800">0</p>
+      </article>
+      <article class="card metric-card">
+        <p class="metric-label">Current semester</p>
+        <p class="metric-value">{{ student.semester | default("6th") }}</p>
+      </article>
+      <article class="card metric-card">
+        <p class="metric-label">Enrolled courses</p>
+        <p class="metric-value" data-count-to="{{ course_count | default(5) }}">0</p>
+      </article>
+      <article class="card metric-card">
+        <p class="metric-label">Due amount</p>
+        <p class="metric-value" data-prefix="Tk " data-count-to="{{ due_amount | default(18500) }}">Tk 0</p>
+      </article>
+    </section>
+
+    <div class="dashboard-layout">
+      <section class="card">
+        <div class="card-body">
+          <h2 class="card-title">Upcoming academic events</h2>
+          <div class="timeline">
+            {% for item in events | default([]) %}
+            <article class="timeline-item">
+              <div class="timeline-date">{{ item.date }}</div>
+              <div class="timeline-body">
+                <h3>{{ item.title }}</h3>
+                <p>{{ item.description }}</p>
+              </div>
+            </article>
+            {% else %}
+            <article class="timeline-item">
+              <div class="timeline-date">Soon</div>
+              <div class="timeline-body">
+                <h3>Final exam payment deadline</h3>
+                <p>Clear semester dues before final exam participation.</p>
+              </div>
+            </article>
+            <article class="timeline-item">
+              <div class="timeline-date">Exam</div>
+              <div class="timeline-body">
+                <h3>Midterm and final schedules</h3>
+                <p>Exam dates will appear here after admin upload.</p>
+              </div>
+            </article>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+
+      <aside class="stack">
+        <section class="card">
+          <div class="card-body quick-actions">
+            <h2 class="card-title">Quick actions</h2>
+            <a class="quick-action" href="/chat">Ask a question <span>-></span></a>
+            <a class="quick-action" href="/fee-details">View fee calculation <span>-></span></a>
+            <a class="quick-action" href="/courses">Check courses <span>-></span></a>
+            <a class="quick-action" href="/exam-schedule">Exam schedule <span>-></span></a>
+          </div>
+        </section>
+        <section class="card">
+          <div class="card-body">
+            <h2 class="card-title">Security scope</h2>
+            <p class="muted">This dashboard only shows records for the student linked to your verified parent account.</p>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/dashboard.js') }}"></script>
+{% endblock %}
