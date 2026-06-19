@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Secure University Parent Assistant{% endblock %}
+
+{% block topbar %}
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="brand" href="/">
+      <span class="brand-mark">UP</span>
+      <span>Parent Assistant</span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="/login">Login</a>
+      <a href="/register">Register</a>
+    </nav>
+  </div>
+</header>
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container grid two">
+    <div class="stack">
+      <span class="badge success">Secure LLM + RAG API</span>
+      <h1 class="page-title">Ask trusted questions about your child's university record.</h1>
+      <p class="page-subtitle">
+        Verified parents can view academic, course, exam, and fee information with answers grounded in student records and official university policy.
+      </p>
+      <div class="inline">
+        <a class="button" href="/login">Parent login</a>
+        <a class="button secondary" href="/register">Create account</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-body stack">
+        <h2 class="card-title">Privacy-first flow</h2>
+        <div class="info-list">
+          <div class="info-row">
+            <span class="info-label">Parent identity</span>
+            <span class="info-value">JWT verified</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Student scope</span>
+            <span class="info-value">Backend enforced</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">SQL access</span>
+            <span class="info-value">Safe templates</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Policy answers</span>
+            <span class="info-value">RAG context</span>
+          </div>
+        </div>
+        <div class="alert success">
+          Parents never submit or control a student ID. The backend always uses the authorized child mapping.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
