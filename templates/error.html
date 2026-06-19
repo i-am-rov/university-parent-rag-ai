@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Error - University Parent Assistant{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container">
+    <div class="empty-state">
+      <div class="stack">
+        <span class="badge danger">{{ status_code | default("Error") }}</span>
+        <h1 class="page-title">{{ title | default("Something went wrong") }}</h1>
+        <p class="page-subtitle">{{ message | default("The request could not be completed. Please try again or return to the dashboard.") }}</p>
+        <div class="inline">
+          <a class="button" href="/dashboard">Go to dashboard</a>
+          <a class="button secondary" href="/chat">Ask assistant</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
