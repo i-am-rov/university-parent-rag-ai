@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}University Parent Assistant{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+  </head>
+  <body class="{% block body_class %}app-shell{% endblock %}">
+    {% block topbar %}
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="/">
+          <span class="brand-mark">UP</span>
+          <span>Parent Assistant</span>
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="/dashboard">Dashboard</a>
+          <a href="/chat">Chat</a>
+          <a href="/student-profile">Student</a>
+          <a href="/courses">Courses</a>
+          <a href="/fee-details">Fees</a>
+          <a href="/exam-schedule">Exams</a>
+          <a href="/result">Result</a>
+        </nav>
+        <button class="button secondary" type="button" data-logout data-redirect="/login">Logout</button>
+      </div>
+    </header>
+    {% endblock %}
+
+    <main>
+      <div class="container">
+        <div data-alert-region></div>
+      </div>
+      {% block content %}{% endblock %}
+    </main>
+
+    <script src="{{ url_for('static', path='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>
