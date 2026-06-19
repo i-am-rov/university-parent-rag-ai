@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Student Profile - University Parent Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container stack">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Student profile</h1>
+        <p class="page-subtitle">Profile information for the student linked to your verified parent account.</p>
+      </div>
+    </header>
+
+    <section class="card profile-hero">
+      <div class="avatar">{{ student.initials | default("ST") }}</div>
+      <div>
+        <h2 class="profile-name">{{ student.name | default("Student Name") }}</h2>
+        <div class="profile-meta">
+          <span class="badge">{{ student.student_id | default("S501") }}</span>
+          <span class="badge">{{ student.department | default("CSE") }}</span>
+          <span class="badge">{{ student.batch | default("Batch 2023") }}</span>
+          <span class="badge success">Authorized access</span>
+        </div>
+      </div>
+      <a class="button secondary" href="/chat">Ask about profile</a>
+    </section>
+
+    <div class="student-layout">
+      <section class="card">
+        <div class="card-body">
+          <h2 class="card-title">Academic details</h2>
+          <div class="info-list">
+            <div class="info-row">
+              <span class="info-label">Current semester</span>
+              <span class="info-value">{{ student.semester | default("6th") }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">CGPA</span>
+              <span class="info-value">{{ student.cgpa | default("3.54") }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Enrollment status</span>
+              <span class="info-value">{{ student.status | default("Active") }}</span>
+            </div>
+            <div class="info-row">
+              <span class="info-label">Advisor</span>
+              <span class="info-value">{{ student.advisor | default("Assigned by department") }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="card-body">
+          <h2 class="card-title">Access rule</h2>
+          <p class="muted">Student information is resolved from your login token and parent-child mapping, not from URL input.</p>
+          <div class="alert success">Scope guard active for all student data views.</div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/student.js') }}"></script>
+{% endblock %}
