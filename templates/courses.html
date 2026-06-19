@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - University Parent Assistant{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/student.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="page">
+  <div class="container stack">
+    <header class="page-header">
+      <div>
+        <h1 class="page-title">Current courses</h1>
+        <p class="page-subtitle">Courses enrolled by your authorized child in the current semester.</p>
+      </div>
+      <input class="input" type="search" placeholder="Filter courses" data-table-filter="courses-table" aria-label="Filter courses">
+    </header>
+
+    <div class="table-wrap">
+      <table class="table" id="courses-table">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Course</th>
+            <th>Credits</th>
+            <th>Faculty</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for course in courses | default([]) %}
+          <tr>
+            <td>{{ course.code }}</td>
+            <td>{{ course.name }}</td>
+            <td>{{ course.credits }}</td>
+            <td>{{ course.faculty }}</td>
+            <td><span class="badge success">{{ course.status | default("Enrolled") }}</span></td>
+          </tr>
+          {% else %}
+          <tr>
+            <td>CSE-321</td>
+            <td>Database Systems</td>
+            <td>3</td>
+            <td>Faculty Member</td>
+            <td><span class="badge success">Enrolled</span></td>
+          </tr>
+          <tr>
+            <td>CSE-325</td>
+            <td>Software Engineering</td>
+            <td>3</td>
+            <td>Faculty Member</td>
+            <td><span class="badge success">Enrolled</span></td>
+          </tr>
+          <tr>
+            <td>CSE-329</td>
+            <td>Artificial Intelligence</td>
+            <td>3</td>
+            <td>Faculty Member</td>
+            <td><span class="badge success">Enrolled</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', path='js/student.js') }}"></script>
+{% endblock %}
