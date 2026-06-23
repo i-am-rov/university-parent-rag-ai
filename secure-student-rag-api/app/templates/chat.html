@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Chat</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; padding: 0 16px; line-height: 1.5; }
+      nav a { margin-right: 12px; }
+      label { display: block; margin-top: 16px; }
+      textarea, button { width: 100%; padding: 10px; margin-top: 6px; box-sizing: border-box; }
+      textarea { min-height: 120px; }
+      button { cursor: pointer; }
+      .box { border: 1px solid #ddd; padding: 16px; margin-top: 16px; }
+    </style>
+  </head>
+  <body>
+    <h1>Chat</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/login">Login</a>
+      <a href="/dashboard">Dashboard</a>
+    </nav>
+
+    <form id="chat-form" class="box">
+      <label for="question">Question</label>
+      <textarea id="question" name="question" placeholder="Write your question here..." required></textarea>
+      <button id="send-button" type="submit">Send</button>
+    </form>
+
+    <div class="box">
+      <h2>Answer</h2>
+      <p id="answer">Answer will show here.</p>
+    </div>
+
+    <script src="/static/js/chat.js"></script>
+  </body>
+</html>
