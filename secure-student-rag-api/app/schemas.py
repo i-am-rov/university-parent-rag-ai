@@ -71,11 +71,11 @@ class SearchResult(BaseModel):
 
 
 class ChatRequest(BaseModel):
-    question: str = Field(min_length=3, max_length=1000)
+    question: str = Field(min_length=1, max_length=1000)
     student_id: int | None = None
     category: str | None = None
 
 
 class ChatResponse(BaseModel):
     answer: str
-    sources: list[SearchResult]
+    sources: list[SearchResult] = Field(default_factory=list)

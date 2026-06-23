@@ -42,6 +42,10 @@ uvicorn app.main:app --reload
 
 Open:
 
+- Home page: http://127.0.0.1:8000/
+- Login page: http://127.0.0.1:8000/login
+- Dashboard page: http://127.0.0.1:8000/dashboard
+- Chat page: http://127.0.0.1:8000/chat
 - API docs: http://127.0.0.1:8000/docs
 - Health check: http://127.0.0.1:8000/health
 

@@ -3,46 +3,17 @@ from typing import Annotated
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.database import ChatMessage, Student, User, get_db
-from app.llm.provider import llm_provider
-from app.schemas import ChatRequest, ChatResponse, SearchResult
+from app.database import ChatMessage, User, get_db
+from app.schemas import ChatRequest, ChatResponse
 from app.security.auth import get_current_user
-from app.security.guards import get_accessible_student, reject_sensitive_question
-from app.services.rag_service import search_documents
 
 
 router = APIRouter(prefix="/chat", tags=["chat"])
 
 
 @router.post("", response_model=ChatResponse)
-def ask(
-    payload: ChatRequest,
-    db: Annotated[Session, Depends(get_db)],
-    current_user: Annotated[User, Depends(get_current_user)],
-) -> ChatResponse:
-    reject_sensitive_question(payload.question)
-
-    student: Student | None = None
-    if payload.student_id is not None:
-        student = get_accessible_student(db, payload.student_id, current_user)
-
-    sources = search_documents(db, payload.question, category=payload.category)
-    answer = llm_provider.answer(payload.question, sources=sources, student=student)
-
-    db.add(
-        ChatMessage(
-            user_id=current_user.id,
-            student_id=student.id if student else None,
-            question=payload.question,
-            answer=answer,
-        )
-    )
-    db.commit()
-
-    return ChatResponse(
-        answer=answer,
-        sources=[SearchResult(**source.__dict__) for source in sources],
-    )
+def ask(payload: ChatRequest) -> ChatResponse:
+    return ChatResponse(answer="This is a test answer from backend.")
 
 
 @router.get("/history")
