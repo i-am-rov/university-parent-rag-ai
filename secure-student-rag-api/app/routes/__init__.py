@@ -1,3 +1,3 @@
-from app.routes import auth, chat, documents, health, students
+from app.routes import auth, chat, documents, health, pages, students
 
-__all__ = ["auth", "chat", "documents", "health", "students"]
+__all__ = ["auth", "chat", "documents", "health", "pages", "students"]
