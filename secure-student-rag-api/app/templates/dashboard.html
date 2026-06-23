@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+    <style>
+      body { font-family: Arial, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 16px; line-height: 1.5; }
+      nav a, nav button { margin-right: 12px; }
+      button { padding: 8px 12px; cursor: pointer; }
+      .box { border: 1px solid #ddd; padding: 16px; margin-top: 16px; }
+      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+      th { background: #f5f5f5; }
+    </style>
+  </head>
+  <body>
+    <h1>Dashboard</h1>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/chat">Chat</a>
+      <button id="logout" type="button">Logout</button>
+    </nav>
+
+    <div class="box">
+      <h2>User</h2>
+      <p id="user-info">Loading...</p>
+    </div>
+
+    <div class="box">
+      <h2>Students</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Department</th>
+            <th>Semester</th>
+          </tr>
+        </thead>
+        <tbody id="students-body">
+          <tr><td colspan="4">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      const token = localStorage.getItem("access_token");
+      const userInfo = document.getElementById("user-info");
+      const studentsBody = document.getElementById("students-body");
+
+      document.getElementById("logout").addEventListener("click", () => {
+        localStorage.removeItem("access_token");
+        window.location.href = "/login";
+      });
+
+      async function apiGet(url) {
+        const response = await fetch(url, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!response.ok) {
+          throw new Error("Please login again.");
+        }
+        return response.json();
+      }
+
+      function setEmptyStudents(message) {
+        studentsBody.replaceChildren();
+        const row = document.createElement("tr");
+        const cell = document.createElement("td");
+        cell.colSpan = 4;
+        cell.textContent = message;
+        row.appendChild(cell);
+        studentsBody.appendChild(row);
+      }
+
+      function addStudentRow(student) {
+        const row = document.createElement("tr");
+        [student.student_id, student.full_name, student.department, student.semester].forEach((value) => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          row.appendChild(cell);
+        });
+        studentsBody.appendChild(row);
+      }
+
+      async function loadDashboard() {
+        if (!token) {
+          window.location.href = "/login";
+          return;
+        }
+
+        try {
+          const user = await apiGet("/api/auth/me");
+          userInfo.textContent = `${user.full_name} (${user.email}) - ${user.role}`;
+
+          const students = await apiGet("/api/students");
+          if (students.length === 0) {
+            setEmptyStudents("No students found.");
+            return;
+          }
+
+          studentsBody.replaceChildren();
+          students.forEach(addStudentRow);
+        } catch (error) {
+          userInfo.textContent = error.message;
+          setEmptyStudents("Unable to load students.");
+        }
+      }
+
+      loadDashboard();
+    </script>
+  </body>
+</html>
