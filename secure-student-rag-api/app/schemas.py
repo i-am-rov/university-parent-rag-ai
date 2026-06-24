@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -44,6 +44,51 @@ class StudentRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
+class StudentProfile(BaseModel):
+    id: int
+    student_id: str
+    full_name: str
+    department: str
+    semester: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class StudentFeeRead(BaseModel):
+    id: int
+    semester: str
+    total_amount: float
+    paid_amount: float
+    due_amount: float
+    status: str
+    due_date: date
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class StudentCourseRead(BaseModel):
+    id: int
+    code: str
+    title: str
+    credit: int
+    teacher: str
+    semester: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class StudentExamRead(BaseModel):
+    id: int
+    course_code: str
+    course_title: str
+    exam_type: str
+    exam_date: date
+    start_time: str
+    room: str
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class DocumentCreate(BaseModel):
     title: str = Field(min_length=2, max_length=255)
     category: str = Field(default="general", min_length=2, max_length=120)
@@ -72,8 +117,8 @@ class SearchResult(BaseModel):
 
 class ChatRequest(BaseModel):
     question: str = Field(min_length=1, max_length=1000)
-    student_id: int | None = None
-    category: str | None = None
+
+    model_config = ConfigDict(extra="forbid")
 
 
 class ChatResponse(BaseModel):
