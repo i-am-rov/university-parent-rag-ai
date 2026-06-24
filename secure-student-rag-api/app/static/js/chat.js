@@ -16,10 +16,16 @@ chatForm.addEventListener("submit", async (event) => {
   sendButton.disabled = true;
 
   try {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      throw new Error("Please login before asking a question.");
+    }
+
     const response = await fetch("/api/chat", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify({ question })
     });

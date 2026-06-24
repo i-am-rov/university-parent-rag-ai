@@ -49,6 +49,23 @@ Open:
 - API docs: http://127.0.0.1:8000/docs
 - Health check: http://127.0.0.1:8000/health
 
+Normal database API examples:
+
+- Profile: http://127.0.0.1:8000/api/student/profile
+- Fees: http://127.0.0.1:8000/api/student/fees
+- Courses: http://127.0.0.1:8000/api/student/courses
+- Exams: http://127.0.0.1:8000/api/student/exams
+
+These endpoints require a parent login token. The frontend sends only the question for chat:
+
+```json
+{
+  "question": "What is CGPA?"
+}
+```
+
+The backend reads the parent from the JWT and finds the linked student from the database.
+
 ## Demo Accounts
 
 The app seeds these users the first time the database is created:
