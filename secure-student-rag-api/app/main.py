@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from app.database import SessionLocal, get_settings, init_db
-from app.routes import auth, chat_routes, documents, health, pages, students
+from app.routes import auth_routes, chat_routes, documents, health, pages, student_routes, students
 from app.services.seed_service import seed_demo_data
 
 
@@ -46,7 +46,8 @@ app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 app.include_router(pages.router)
 app.include_router(health.router)
-app.include_router(auth.router, prefix="/api")
+app.include_router(auth_routes.router, prefix="/api")
 app.include_router(students.router, prefix="/api")
+app.include_router(student_routes.router)
 app.include_router(documents.router, prefix="/api")
 app.include_router(chat_routes.router)
