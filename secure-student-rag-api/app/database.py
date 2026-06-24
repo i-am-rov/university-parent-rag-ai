@@ -1,10 +1,10 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from functools import lru_cache
 from pathlib import Path
 from typing import Generator
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from sqlalchemy import Boolean, DateTime, ForeignKey, String, Text, create_engine
+from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship, sessionmaker
 
 
@@ -67,6 +67,53 @@ class Student(Base):
 
     guardian: Mapped[User | None] = relationship(back_populates="students")
     messages: Mapped[list["ChatMessage"]] = relationship(back_populates="student")
+    fees: Mapped[list["StudentFee"]] = relationship(back_populates="student")
+    courses: Mapped[list["StudentCourse"]] = relationship(back_populates="student")
+    exams: Mapped[list["StudentExam"]] = relationship(back_populates="student")
+
+
+class StudentFee(Base):
+    __tablename__ = "student_fees"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    student_pk: Mapped[int] = mapped_column(ForeignKey("students.id"), index=True)
+    semester: Mapped[str] = mapped_column(String(80))
+    total_amount: Mapped[float] = mapped_column(Float)
+    paid_amount: Mapped[float] = mapped_column(Float, default=0)
+    due_amount: Mapped[float] = mapped_column(Float, default=0)
+    status: Mapped[str] = mapped_column(String(50), default="due")
+    due_date: Mapped[date] = mapped_column(Date)
+
+    student: Mapped[Student] = relationship(back_populates="fees")
+
+
+class StudentCourse(Base):
+    __tablename__ = "student_courses"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    student_pk: Mapped[int] = mapped_column(ForeignKey("students.id"), index=True)
+    code: Mapped[str] = mapped_column(String(50))
+    title: Mapped[str] = mapped_column(String(255))
+    credit: Mapped[int] = mapped_column(Integer)
+    teacher: Mapped[str] = mapped_column(String(255))
+    semester: Mapped[str] = mapped_column(String(80))
+
+    student: Mapped[Student] = relationship(back_populates="courses")
+
+
+class StudentExam(Base):
+    __tablename__ = "student_exams"
+
+    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    student_pk: Mapped[int] = mapped_column(ForeignKey("students.id"), index=True)
+    course_code: Mapped[str] = mapped_column(String(50))
+    course_title: Mapped[str] = mapped_column(String(255))
+    exam_type: Mapped[str] = mapped_column(String(80))
+    exam_date: Mapped[date] = mapped_column(Date)
+    start_time: Mapped[str] = mapped_column(String(20))
+    room: Mapped[str] = mapped_column(String(80))
+
+    student: Mapped[Student] = relationship(back_populates="exams")
 
 
 class KnowledgeDocument(Base):
