@@ -66,6 +66,12 @@ These endpoints require a parent login token. The frontend sends only the questi
 
 The backend reads the parent from the JWT and finds the linked student from the database.
 
+Student privacy is enforced in `app/security/student_scope_guard.py`:
+
+```text
+logged-in parent_id -> linked student row -> all queries filtered by that student
+```
+
 ## Demo Accounts
 
 The app seeds these users the first time the database is created:
