@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.database import Student, User
 from app.schemas import UserCreate
 from app.security.password_utils import hash_password, verify_password
+from app.security.student_scope_guard import get_scoped_student_for_user
 
 
 def create_user(db: Session, payload: UserCreate) -> User:
@@ -47,21 +48,5 @@ def authenticate_user(db: Session, email: str, password: str) -> User | None:
     return user
 
 
-def get_linked_student_for_parent(db: Session, parent: User) -> Student:
-    if parent.role != "parent":
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Logged-in user is not a parent")
-
-    student = db.query(Student).filter(Student.guardian_id == parent.id).order_by(Student.id).first()
-    if student is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="No student is linked to this parent")
-    return student
-
-
 def get_student_for_user(db: Session, user: User) -> Student:
-    if user.role == "parent":
-        return get_linked_student_for_parent(db, user)
-
-    student = db.query(Student).order_by(Student.id).first()
-    if student is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Student not found")
-    return student
+    return get_scoped_student_for_user(db, user)
