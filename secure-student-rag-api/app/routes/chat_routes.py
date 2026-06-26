@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app.database import ChatMessage, User, get_db
 from app.schemas import ChatRequest, ChatResponse
 from app.security.jwt_handler import get_current_user
-from app.services.auth_service import get_student_for_user
+from app.security.student_scope_guard import get_scoped_student_for_user
 
 
 router = APIRouter(tags=["chat"])
@@ -18,7 +18,7 @@ def chat(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[User, Depends(get_current_user)],
 ) -> ChatResponse:
-    student = get_student_for_user(db, current_user)
+    student = get_scoped_student_for_user(db, current_user)
     answer = f"You asked: {request.question}"
     db.add(
         ChatMessage(
