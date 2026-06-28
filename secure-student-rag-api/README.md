@@ -72,6 +72,20 @@ Student privacy is enforced in `app/security/student_scope_guard.py`:
 logged-in parent_id -> linked student row -> all queries filtered by that student
 ```
 
+Local LLM flow:
+
+```text
+FastAPI -> Ollama -> qwen3:4b -> FastAPI
+```
+
+Set these values in `.env` if your Ollama setup is different:
+
+```text
+OLLAMA_BASE_URL=http://127.0.0.1:11434
+OLLAMA_MODEL=qwen3:4b
+OLLAMA_TIMEOUT_SECONDS=120
+```
+
 ## Demo Accounts
 
 The app seeds these users the first time the database is created:
