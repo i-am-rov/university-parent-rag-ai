@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Generator
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text, create_engine
+from sqlalchemy import Boolean, Date, DateTime, Float, ForeignKey, Integer, String, Text, create_engine, text
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, relationship, sessionmaker
 
 
@@ -65,6 +65,7 @@ class Student(Base):
     full_name: Mapped[str] = mapped_column(String(255))
     department: Mapped[str] = mapped_column(String(120))
     semester: Mapped[str] = mapped_column(String(80))
+    cgpa: Mapped[float | None] = mapped_column(Float, nullable=True)
     guardian_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
 
@@ -158,3 +159,16 @@ def init_db() -> None:
         if db_path.parent != Path("."):
             db_path.parent.mkdir(parents=True, exist_ok=True)
     Base.metadata.create_all(bind=engine)
+    ensure_sqlite_columns()
+
+
+def ensure_sqlite_columns() -> None:
+    if not settings.database_url.startswith("sqlite"):
+        return
+
+    with engine.begin() as connection:
+        student_columns = {
+            row[1] for row in connection.execute(text("PRAGMA table_info(students)")).fetchall()
+        }
+        if "cgpa" not in student_columns:
+            connection.execute(text("ALTER TABLE students ADD COLUMN cgpa FLOAT"))

@@ -31,10 +31,13 @@ def seed_demo_data(db: Session) -> None:
             full_name="Ayesha Rahman",
             department="Computer Science",
             semester="Spring 2026",
+            cgpa=3.75,
             guardian_id=parent.id,
         )
         db.add(student)
         db.flush()
+    elif student.cgpa is None:
+        student.cgpa = 3.75
 
     if not db.query(KnowledgeDocument).first():
         docs = [

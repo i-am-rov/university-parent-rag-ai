@@ -50,6 +50,7 @@ class StudentProfile(BaseModel):
     full_name: str
     department: str
     semester: str
+    cgpa: float | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
