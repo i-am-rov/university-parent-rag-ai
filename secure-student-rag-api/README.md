@@ -78,6 +78,14 @@ Local LLM flow:
 FastAPI -> Ollama -> qwen3:4b -> FastAPI
 ```
 
+SQL generation flow:
+
+```text
+question -> app/llm/sql_generator.py -> safe SELECT SQL -> print/check only
+```
+
+At this stage SQL is generated for review and is not executed.
+
 Set these values in `.env` if your Ollama setup is different:
 
 ```text
