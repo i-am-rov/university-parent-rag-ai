@@ -1,16 +1,14 @@
-import re
-
 import requests
 from fastapi import HTTPException, status
 
 from app.config import OLLAMA_BASE_URL, OLLAMA_MODEL, OLLAMA_TIMEOUT_SECONDS
 from app.llm.local_llm import remove_thinking_text
+from app.security.sql_validator import validate_sql
 
 
-FORBIDDEN_SQL = re.compile(
-    r"\b(insert|update|delete|drop|alter|truncate|create|replace|pragma|attach|detach)\b",
-    re.IGNORECASE,
-)
+import re
+
+
 SQL_FENCE_RE = re.compile(r"```(?:sql)?\s*(.*?)```", re.DOTALL | re.IGNORECASE)
 
 
@@ -70,6 +68,7 @@ Rules:
 - Always scope the query with the parameter :student_id.
 - For the students table, use WHERE student_id = :student_id.
 - For child tables, join through students or use a subquery linked to students.id.
+- Use LIMIT only when a list may be returned, and keep LIMIT between 1 and 100.
 
 {DATABASE_SCHEMA}
 
@@ -95,16 +94,6 @@ def extract_sql(raw_text: str) -> str:
     return f"{first_statement};"
 
 
-def validate_generated_sql(sql: str) -> None:
-    normalized = sql.strip().lower()
-    if not normalized.startswith("select "):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Generated SQL is not a SELECT statement.")
-    if FORBIDDEN_SQL.search(sql):
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Generated SQL contains a forbidden keyword.")
-    if ":student_id" not in sql:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Generated SQL is missing :student_id scope.")
-
-
 def generate_sql(question: str) -> str:
     payload = {
         "model": OLLAMA_MODEL,
@@ -125,8 +114,7 @@ def generate_sql(question: str) -> str:
             detail=f"Could not connect to Ollama model {OLLAMA_MODEL}.",
         ) from exc
 
-    sql = extract_sql(response.json().get("response", ""))
-    validate_generated_sql(sql)
+    sql = validate_sql(extract_sql(response.json().get("response", "")))
     print(f"[SQL_GENERATOR] question={question!r}")
     print(f"[SQL_GENERATOR] sql={sql}")
     return sql
