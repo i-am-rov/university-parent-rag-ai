@@ -81,10 +81,12 @@ FastAPI -> Ollama -> qwen3:4b -> FastAPI
 SQL generation flow:
 
 ```text
-question -> app/llm/sql_generator.py -> safe SELECT SQL -> print/check only
+question -> app/llm/sql_generator.py -> app/security/sql_validator.py -> safe SELECT SQL -> print/check only
 ```
 
 At this stage SQL is generated for review and is not executed.
+
+The SQL validator blocks write commands, unknown tables or columns, unsafe LIMIT clauses, and any SQL missing `student_id = :student_id` scope.
 
 Set these values in `.env` if your Ollama setup is different:
 
