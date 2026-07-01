@@ -81,12 +81,17 @@ FastAPI -> Ollama -> qwen3:4b -> FastAPI
 SQL generation flow:
 
 ```text
-question -> app/llm/sql_generator.py -> app/security/sql_validator.py -> safe SELECT SQL -> print/check only
+question -> app/llm/sql_generator.py -> app/security/sql_validator.py -> safe SELECT SQL
 ```
 
-At this stage SQL is generated for review and is not executed.
+SQL execution flow:
+
+```text
+question -> generated SQL -> validator -> scoped database execution -> rows -> answer
+```
 
 The SQL validator blocks write commands, unknown tables or columns, unsafe LIMIT clauses, and any SQL missing `student_id = :student_id` scope.
+The executor binds `:student_id` from the logged-in parent's linked student, never from the frontend.
 
 Set these values in `.env` if your Ollama setup is different:
 
@@ -115,9 +120,7 @@ Example chat body:
 
 ```json
 {
-  "question": "What are the exam attendance rules?",
-  "student_id": 1,
-  "category": "exams"
+  "question": "What is my child's CGPA?"
 }
 ```
 

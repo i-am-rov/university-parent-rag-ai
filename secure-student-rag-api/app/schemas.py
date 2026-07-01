@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
@@ -124,4 +125,6 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     answer: str
+    generated_sql: str | None = None
+    rows: list[dict[str, Any]] = Field(default_factory=list)
     sources: list[SearchResult] = Field(default_factory=list)
