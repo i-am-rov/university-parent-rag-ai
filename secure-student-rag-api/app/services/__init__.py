@@ -1,1 +1,1 @@
-"""Business, retrieval, and seeding service modules."""
+"""Business, retrieval, query execution, and seeding service modules."""
