@@ -5,49 +5,317 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Dashboard</title>
     <style>
-      body { font-family: Arial, sans-serif; max-width: 760px; margin: 40px auto; padding: 0 16px; line-height: 1.5; }
-      nav a, nav button { margin-right: 12px; }
-      button { padding: 8px 12px; cursor: pointer; }
-      .box { border: 1px solid #ddd; padding: 16px; margin-top: 16px; }
-      table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-      th { background: #f5f5f5; }
+      :root {
+        --bg: #f6f7fb;
+        --panel: #ffffff;
+        --text: #202433;
+        --muted: #687084;
+        --line: #e4e7ef;
+        --green: #168564;
+        --green-soft: #e8f6f1;
+        --gold: #a56a12;
+        --gold-soft: #fff4dd;
+        --blue: #2e6fd8;
+        --blue-soft: #edf4ff;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+        line-height: 1.5;
+      }
+
+      .page {
+        width: min(1080px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 28px 0 48px;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 24px;
+      }
+
+      h1, h2, p { margin-top: 0; }
+
+      h1 {
+        margin-bottom: 4px;
+        font-size: 30px;
+        letter-spacing: 0;
+      }
+
+      .subtitle {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .nav a,
+      .nav button {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        color: var(--text);
+        padding: 9px 13px;
+        font: inherit;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .nav a.primary {
+        border-color: var(--blue);
+        background: var(--blue);
+        color: #ffffff;
+      }
+
+      .nav button:hover,
+      .nav a:hover {
+        border-color: #b8bfce;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      .card,
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 12px 28px rgba(31, 38, 55, 0.07);
+      }
+
+      .card {
+        padding: 18px;
+      }
+
+      .card-label {
+        margin-bottom: 8px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .card-value {
+        margin-bottom: 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+
+      .card.green { background: var(--green-soft); border-color: #bfe3d7; }
+      .card.gold { background: var(--gold-soft); border-color: #f1d79f; }
+      .card.blue { background: var(--blue-soft); border-color: #c9dcff; }
+
+      .profile {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px;
+        margin-bottom: 16px;
+      }
+
+      .avatar {
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+        background: var(--green);
+        color: #ffffff;
+        font-weight: 700;
+      }
+
+      .profile h2 {
+        margin-bottom: 2px;
+        font-size: 18px;
+      }
+
+      .profile p {
+        margin-bottom: 0;
+        color: var(--muted);
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        border-radius: 999px;
+        padding: 3px 9px;
+        background: #eef0f5;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .panel {
+        overflow: hidden;
+      }
+
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 18px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .panel-header h2 {
+        margin-bottom: 0;
+        font-size: 18px;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 640px;
+      }
+
+      th, td {
+        padding: 14px 18px;
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+      }
+
+      th {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      tbody tr:last-child td {
+        border-bottom: 0;
+      }
+
+      tbody tr:hover {
+        background: #fafbfe;
+      }
+
+      .student-id {
+        display: inline-block;
+        border-radius: 8px;
+        background: #eef0f5;
+        padding: 4px 8px;
+        font-weight: 700;
+      }
+
+      .empty {
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 760px) {
+        .topbar {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .nav,
+        .nav a,
+        .nav button {
+          width: 100%;
+        }
+
+        .nav a,
+        .nav button {
+          text-align: center;
+        }
+      }
     </style>
   </head>
   <body>
-    <h1>Dashboard</h1>
-    <nav>
-      <a href="/">Home</a>
-      <a href="/chat">Chat</a>
-      <button id="logout" type="button">Logout</button>
-    </nav>
+    <main class="page">
+      <header class="topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <p class="subtitle">Student overview and parent account details</p>
+        </div>
 
-    <div class="box">
-      <h2>User</h2>
-      <p id="user-info">Loading...</p>
-    </div>
+        <nav class="nav">
+          <a href="/">Home</a>
+          <a class="primary" href="/chat">Chat</a>
+          <button id="logout" type="button">Logout</button>
+        </nav>
+      </header>
 
-    <div class="box">
-      <h2>Students</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Department</th>
-            <th>Semester</th>
-          </tr>
-        </thead>
-        <tbody id="students-body">
-          <tr><td colspan="4">Loading...</td></tr>
-        </tbody>
-      </table>
-    </div>
+      <section class="profile panel">
+        <div id="avatar" class="avatar">P</div>
+        <div>
+          <h2 id="user-name">Loading...</h2>
+          <p id="user-info">Loading account details...</p>
+        </div>
+      </section>
+
+      <section class="grid" aria-label="Student summary">
+        <div class="card green">
+          <p class="card-label">Linked Students</p>
+          <p id="student-count" class="card-value">0</p>
+        </div>
+        <div class="card gold">
+          <p class="card-label">Department</p>
+          <p id="department-summary" class="card-value">-</p>
+        </div>
+        <div class="card blue">
+          <p class="card-label">Semester</p>
+          <p id="semester-summary" class="card-value">-</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Students</h2>
+          <span id="status-pill" class="pill">Loading</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Semester</th>
+              </tr>
+            </thead>
+            <tbody id="students-body">
+              <tr><td class="empty" colspan="4">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
 
     <script>
       const token = localStorage.getItem("access_token");
+      const userName = document.getElementById("user-name");
       const userInfo = document.getElementById("user-info");
+      const avatar = document.getElementById("avatar");
       const studentsBody = document.getElementById("students-body");
+      const studentCount = document.getElementById("student-count");
+      const departmentSummary = document.getElementById("department-summary");
+      const semesterSummary = document.getElementById("semester-summary");
+      const statusPill = document.getElementById("status-pill");
 
       document.getElementById("logout").addEventListener("click", () => {
         localStorage.removeItem("access_token");
@@ -64,11 +332,16 @@
         return response.json();
       }
 
+      function setStatus(message) {
+        statusPill.textContent = message;
+      }
+
       function setEmptyStudents(message) {
         studentsBody.replaceChildren();
         const row = document.createElement("tr");
         const cell = document.createElement("td");
         cell.colSpan = 4;
+        cell.className = "empty";
         cell.textContent = message;
         row.appendChild(cell);
         studentsBody.appendChild(row);
@@ -76,12 +349,28 @@
 
       function addStudentRow(student) {
         const row = document.createElement("tr");
-        [student.student_id, student.full_name, student.department, student.semester].forEach((value) => {
+
+        const idCell = document.createElement("td");
+        const idBadge = document.createElement("span");
+        idBadge.className = "student-id";
+        idBadge.textContent = student.student_id;
+        idCell.appendChild(idBadge);
+        row.appendChild(idCell);
+
+        [student.full_name, student.department, student.semester].forEach((value) => {
           const cell = document.createElement("td");
           cell.textContent = value;
           row.appendChild(cell);
         });
+
         studentsBody.appendChild(row);
+      }
+
+      function updateSummary(students) {
+        studentCount.textContent = students.length;
+        departmentSummary.textContent = students[0]?.department || "-";
+        semesterSummary.textContent = students[0]?.semester || "-";
+        setStatus(students.length ? "Ready" : "No data");
       }
 
       async function loadDashboard() {
@@ -92,9 +381,13 @@
 
         try {
           const user = await apiGet("/api/auth/me");
-          userInfo.textContent = `${user.full_name} (${user.email}) - ${user.role}`;
+          userName.textContent = user.full_name;
+          userInfo.textContent = `${user.email} - ${user.role}`;
+          avatar.textContent = user.full_name.charAt(0).toUpperCase();
 
           const students = await apiGet("/api/students");
+          updateSummary(students);
+
           if (students.length === 0) {
             setEmptyStudents("No students found.");
             return;
@@ -103,7 +396,13 @@
           studentsBody.replaceChildren();
           students.forEach(addStudentRow);
         } catch (error) {
+          userName.textContent = "Session expired";
           userInfo.textContent = error.message;
+          avatar.textContent = "!";
+          studentCount.textContent = "0";
+          departmentSummary.textContent = "-";
+          semesterSummary.textContent = "-";
+          setStatus("Error");
           setEmptyStudents("Unable to load students.");
         }
       }
